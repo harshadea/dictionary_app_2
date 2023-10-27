@@ -1,5 +1,7 @@
 // ignore: file_names
+import 'package:dictionary_app_1/controllers/getx_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RadioButtonsRow extends StatefulWidget {
   const RadioButtonsRow({super.key});
@@ -11,7 +13,7 @@ class RadioButtonsRow extends StatefulWidget {
 
 class _RadioButtonsRowState extends State<RadioButtonsRow> {
   // Initialize with the default selected value.
-
+  final ColorController colorController = Get.put(ColorController());
   int selectedValue = 0;
 
   void handleRadioValueChange(int? value) {
@@ -22,41 +24,43 @@ class _RadioButtonsRowState extends State<RadioButtonsRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Radio(
-          value: 0,
-          groupValue: selectedValue,
-          onChanged: handleRadioValueChange,
-        ),
-        const Text(
-          'StartWith',
-          style: TextStyle(
-              fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        Radio(
-          value: 1,
-          groupValue: selectedValue,
-          onChanged: handleRadioValueChange,
-        ),
-        const Text(
-          'Contains',
-          style: TextStyle(
-              fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        Radio(
-          value: 2,
-          groupValue: selectedValue,
-          onChanged: handleRadioValueChange,
-        ),
-        const Text(
-          'EndWith',
-          style: TextStyle(
-              fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ],
-    );
+    return GetX(builder: (controller) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Radio(
+            value: 0,
+            groupValue: selectedValue,
+            onChanged: handleRadioValueChange,
+          ),
+          const Text(
+            'StartWith',
+            style: TextStyle(
+                fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          Radio(
+            value: 1,
+            groupValue: selectedValue,
+            onChanged: handleRadioValueChange,
+          ),
+          const Text(
+            'Contains',
+            style: TextStyle(
+                fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          Radio(
+            value: 2,
+            groupValue: selectedValue,
+            onChanged: handleRadioValueChange,
+          ),
+          const Text(
+            'EndWith',
+            style: TextStyle(
+                fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ],
+      );
+    });
   }
 }
 

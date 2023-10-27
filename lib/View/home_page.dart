@@ -1,6 +1,10 @@
-import 'package:dictionary_app_1/Widgets/Radio_buttons.dart';
+import 'package:csv/csv.dart';
+import 'package:dictionary_app_1/Widgets/bottom/bottom.dart';
 import 'package:dictionary_app_1/Widgets/drawer.dart';
+import 'package:dictionary_app_1/containers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -12,52 +16,92 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
+  List<List<dynamic>> _data = [];
+
+  // ignore: unused_element
+  void _loadCSV() async {
+    final _rawData = await rootBundle.loadString("assets/images/olam-enml.csv");
+    List<List<dynamic>> _listData =
+        const CsvToListConverter().convert(_rawData);
+    // print(_data);
+    print(_data.length);
+    setState(() {
+      _data = _listData;
+    });
+  }
+
+  TabController? _tabController;
+
+  int selectedindex = 0;
+
+  late bool color;
+
+  Color engColor = Colors.blue;
+  Color malColor = Colors.grey;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+            backgroundColor: selectedindex == 0 ? Colors.blue : Colors.white,
             bottom: TabBar(
+              controller: _tabController,
+              onTap: (int index) {
+                switch (index) {
+                  case 0:
+                    setState(() {
+                      engColor = Colors.white;
+                      malColor = Colors.grey;
+                    });
+                    break;
+                  case 1:
+                    setState(() {
+                      engColor = Colors.grey;
+                      malColor = Colors.white;
+                    });
+                }
+              },
               tabs: [
-                //   onChanged: (val) {
-                //     Hive.box(themeBox).put('darkMode', !value);
-                //   },
-
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 1),
-                  child: Card(
-                      elevation: 6,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      child: const SizedBox(
-                          width: 222,
-                          height: 44,
-                          child: Tab(
-                              icon: Text(
-                            'Eng -> മലയാളം',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )))),
+                GestureDetector(
+                  // onTap: _loadCSV,
+                  child: Tab(
+                    child: Card(
+                        color: engColor,
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: const SizedBox(
+                            width: 222,
+                            height: 44,
+                            child: Tab(
+                                icon: Text(
+                              'Eng -> മലയാളം',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )))),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 1),
-                  child: Card(
-                      elevation: 6,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      child: const SizedBox(
-                          width: 222,
-                          height: 44,
-                          child: Tab(
-                              icon: Text(
-                            'മലയാളം -> Eng',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )))),
+                GestureDetector(
+                  // onTap: _loadCSV,
+                  child: Tab(
+                    child: Card(
+                        color: malColor,
+                        elevation: 6,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: const SizedBox(
+                            width: 222,
+                            height: 44,
+                            child: Tab(
+                                icon: Text(
+                              'മലയാളം -> Eng',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )))),
+                  ),
                 ),
-                //more tabs here
               ],
-              //indicatorColor: Colors.grey,
+              // indicatorColor: Colour ? Colors.black : Colors.amber,
             ),
             title: const Text('English -> മലയാളം ...',
                 style: TextStyle(
@@ -68,101 +112,40 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                   icon: const Icon(Icons.share, color: Colors.amber),
                   onPressed: () {
+                    // Get.to(Containers());
+
                     // print('Notification');
                   })
             ],
-            backgroundColor: Colors.blue,
             elevation: 4),
-        // drawerScrimColor: Colors.black,
-
+        drawerScrimColor: Colors.black87,
         drawer: const dDrawer(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.end, 
-          children: [
-
-
-          
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 66,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.blue),
-              child: Row(children: [
-                Expanded(
-                  child: IconButton(
-                      onPressed: () {
-                        showDialog(
-                            barrierColor: Colors.black87,
-                            context: context,
-                            builder: (_) => AlertDialog(
-                                elevation: 4,
-                                scrollable: true,
-                                title: AppBar(
-                                  title: const Text('Eng History'),
-                                ),
-                                content: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      height: 455,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: const Center(
-                                        child: Text(
-                                          'Nothing Found.....!',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )));
-                      },
-                      icon: const Icon(
-                        Icons.history_outlined,
-                        size: 30,
-                        color: Colors.white,
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 222,
-                    height: 66,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    child:
-                        //SearchWay(),
-                        const TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Type English Word',
-                          hintStyle: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black)),
-                    ),
+        body: TabBarView(controller: _tabController, children: [
+          ListView.builder(
+            itemCount: _data.length,
+            itemBuilder: (context, index) => Card(
+              //english to malayalam
+              elevation: 5,
+              child: ListTile(
+                  // title: Text('english to malayalam'),
+                  // trailing: Text("_data[_selectedIndex][0].toString()"),
+                  // leading: Text("_data[_selectedIndex][1].toString()"),
+                  // subtitle: Text("_data[_selectedIndex][2].toString()"),
                   ),
-                ),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.mic_none_outlined,
-                      color: Colors.white,
-                      size: 30,
-                    ))
-              ]),
             ),
           ),
-          const RadioButtonsRow()
+          Card(
+            //malayalam to english
+            elevation: 5,
+            child: ListTile(
+                // title: Text('malayalam to english'),
+                // trailing: Text("_data[_selectedIndex][0].toString()"),
+                // leading: Text("_data[_selectedIndex][1].toString().trim()"),
+                // subtitle: Text("_data[_selectedIndex][2].toString()"),
+                ),
+          ),
         ]),
+        bottomNavigationBar: Bottom(),
       ),
     );
   }
