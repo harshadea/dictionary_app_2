@@ -1,18 +1,26 @@
-import 'package:dictionary_app_1/View/home_page.dart';
-import 'package:dictionary_app_1/containers.dart';
-import 'package:dictionary_app_1/controllers/datamodel.dart';
-import 'package:dictionary_app_1/controllers/history/history.dart';
-import 'package:dictionary_app_1/controllers/hive/hive_datamodel.dart';
+import 'package:dictionary_app_1/View/Home/home_page.dart';
+import 'package:dictionary_app_1/data/datamodel.dart';
+import 'package:dictionary_app_1/models/history/history.dart';
+import 'package:dictionary_app_1/models/search/hive_datamodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //initialize hive
   await Hive.initFlutter();
-  Hive.registerAdapter(SearchwordAdapter());
+  // regiter the type adapter
   Hive.registerAdapter(SearchHistoryAdapter());
   await Hive.openBox<Searchword>('myDataBox');
+  Hive.registerAdapter(SearchwordAdapter());
+  await Hive.openBox<Searchword>("myDataBox");
+  late Box<Searchword> dictionaryBox = Hive.box<Searchword>("myDataBox");
+  // check the hive box if it is empty load data from the csv file
+  if (dictionaryBox.isEmpty) {
+    loadData();
+  }
+  
 
   loadData();
   runApp(const MyApp());
@@ -25,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: ThemeData(primarySwatch: Colors.purple),
         debugShowCheckedModeBanner: false,
         title: 'Dictionary',
         home: Containers());

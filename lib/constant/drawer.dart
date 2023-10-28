@@ -1,5 +1,4 @@
 // ignore: camel_case_types
-import 'package:dictionary_app_1/Widgets/Radio_buttons.dart';
 import 'package:dictionary_app_1/controllers/getx_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,8 +24,7 @@ class _dDrawerState extends State<dDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return GetX(
-        builder: (controller) => Drawer(
+    return Drawer(
               child: ListView(
                 padding: const EdgeInsets.all(0),
                 children: [
@@ -418,6 +416,6 @@ class _dDrawerState extends State<dDrawer> {
                   ),
                 ],
               ),
-            ));
+            );
   }
 }

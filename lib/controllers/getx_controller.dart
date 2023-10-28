@@ -7,3 +7,5 @@ class ColorController extends GetxController {
     selectedIndex.value = 0;
   }
 }
+
+

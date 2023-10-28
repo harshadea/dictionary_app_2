@@ -1,5 +1,5 @@
 import 'package:csv/csv.dart';
-import 'package:dictionary_app_1/controllers/hive/hive_datamodel.dart';
+import 'package:dictionary_app_1/models/search/hive_datamodel.dart';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
